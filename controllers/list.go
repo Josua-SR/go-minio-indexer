@@ -36,7 +36,7 @@ func List(w http.ResponseWriter, r *http.Request) {
 			proxy.ServeHTTP(w, r)
 		} else {
 			// or just redirect
-			http.Redirect(w, r, models.DirectUrl+r.URL.Path, http.StatusTemporaryRedirect)
+			http.Redirect(w, r, models.PublicUrl+r.URL.Path, http.StatusTemporaryRedirect)
 		}
 
 	} else {

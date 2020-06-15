@@ -32,14 +32,21 @@ func main() {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
 	models.Endpoint = viper.GetString("minio_server")
+	models.PublicEndpoint = viper.GetString("public_minio_server")
 	models.AccessKeyID = viper.GetString("minio_access_key")
 	models.SecretAccessKey = viper.GetString("minio_secret_key")
 	models.UseSSL = viper.GetBool("minio_secure")
+	models.PublicUseSSL = viper.GetBool("public_minio_secure")
 	models.BucketName = viper.GetString("minio_bucket_name")
 	if models.UseSSL {
 		models.DirectUrl = "https://" + models.Endpoint + "/" + models.BucketName
 	} else {
 		models.DirectUrl = "http://" + models.Endpoint + "/" + models.BucketName
+	}
+	if models.PublicUseSSL {
+		models.PublicUrl = "https://" + models.PublicEndpoint + "/" + models.BucketName
+	} else {
+		models.PublicUrl = "http://" + models.PublicEndpoint + "/" + models.BucketName
 	}
 	models.MetaFilename = viper.GetString("meta_filename")
 	models.ReverseProxy = viper.GetBool("reverse_proxy")

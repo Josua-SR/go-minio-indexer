@@ -4,9 +4,11 @@ version: '0.1'
 service_host: localhost
 service_port: 8888
 minio_server: localhost:9000
+public_minio_server: example.domain
 minio_access_key: minioadmin
 minio_secret_key: minioadmin
 minio_secure: false
+public_minio_secure: true
 minio_bucket_name: wp-repo
 meta_filename: meta.html
 reverse_proxy: true

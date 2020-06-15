@@ -13,11 +13,14 @@ import (
 
 // all the variables from the config file
 var Endpoint string
+var PublicEndpoint string
 var AccessKeyID string
 var SecretAccessKey string
 var UseSSL bool
+var PublicUseSSL bool
 var BucketName string
 var DirectUrl string
+var PublicUrl string
 var MetaFilename string
 var ReverseProxy bool
 
