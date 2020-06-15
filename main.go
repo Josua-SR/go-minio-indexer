@@ -2,17 +2,32 @@ package main
 
 import (
 	"fmt"
+	"github.com/jessevdk/go-flags"
 	. "github.com/maltegrosse/go-minio-list/log"
 	"github.com/maltegrosse/go-minio-list/models"
 	"github.com/maltegrosse/go-minio-list/routers"
 	"github.com/spf13/viper"
 	"net/http"
+	"os"
 )
 
+type Options struct {
+	ConfigDir string `short:"c" long:"config-directory" default:"config" description:"location of configuration files"`
+}
+
 func main() {
+	var err error
+	var options Options
+
+	// parse cli options
+	_, err = flags.Parse(&options)
+	if err != nil {
+		os.Exit(1)
+	}
+
 	// load config
-	viper.AddConfigPath("config")
-	err := viper.ReadInConfig()
+	viper.AddConfigPath(options.ConfigDir)
+	err = viper.ReadInConfig()
 	if err != nil {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
