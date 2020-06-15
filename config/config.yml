@@ -1,0 +1,12 @@
+---
+service: go-minio-indexer
+version: '0.1'
+service_host: localhost
+service_port: 8888
+minio_server: localhost:9000
+minio_access_key: minioadmin
+minio_secret_key: minioadmin
+minio_secure: false
+minio_bucket_name: wp-repo
+meta_filename: meta.html
+reverse_proxy: true

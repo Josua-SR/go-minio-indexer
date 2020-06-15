@@ -1,0 +1,121 @@
+{{$Folders := .Folders}}
+{{$Files := .Files}}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="author" content="Malte Grosse - https://www.github.com/maltegrosse">
+    <meta name="generator" content="github.com/maltegrosse">
+    <link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFUAAABVCAYAAAA49ahaAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQyIDc5LjE2MDkyNCwgMjAxNy8wNy8xMy0wMTowNjozOSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo2MEI5QkNCRjUwQzIxMUU5QTkzOEI3NjA0MzM4NkY5NSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo2MEI5QkNDMDUwQzIxMUU5QTkzOEI3NjA0MzM4NkY5NSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjYwQjlCQ0JENTBDMjExRTlBOTM4Qjc2MDQzMzg2Rjk1IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjYwQjlCQ0JFNTBDMjExRTlBOTM4Qjc2MDQzMzg2Rjk1Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+BjWXpAAACzBJREFUeNrsXVlsVNUb/850ukHp0IUCtoVuSIwYXKOi0RfjijaKjQ/6oiaQGJcKrjG4EQRUDK4P6KPxySWKUmxMNLi0YFHMv/gHbCllSgvSjU5pp9N2jt/vzNyb6VDo3NPemTu038sQpnfuub97zu9bft+5V0gpyUk23NkpfXv2UP9ff9HgkSMUaG+nkb4+omCQhMtFKdnZlF5YSBnl5ZR1xRWUfc015M7NFU66BuEIUINB2fvzz9T55Zfka2ggsjImBjr72msp/777yLNiBV+RENMeVN/evbLt3XfJ39Iy6d/KXLKEiqqrMYPFtAQ1ODAgj735JvXU1k75b+fdcw8VPf00udLTxbQBdcjrlc3r1tFQW5tt58goLaXyrVspbcECccGDOvjPP7LpqadopLfX9nOlzptHFdu2AWBxwYLKM1MeXr06LoBGAnvx9u2UNn++uOBADQ4OyoMPP0xDx47FnW4yKyro4k8+IVdaWlyAdcXrwrzMb4kAVFFOUxO1f/BB3M4XF1B9+/bJ7p07Exq6nfriCzpz4IC8MEBlfjn+3nuJTzCY5uI1W20Hta+uDh7fEekjUt/+P/+USQ/qKU49nWSdX32V3DOVQydVHHGSnd69W0Uidp7DbauDamggOTqqfTwqUgVVVZR9ww3knjuXhru6qO/XX+nU55/TaH+/XmgXCIACKBvFl2QEtX//fu1jZy1dSmVvv02peXlmbMkpJ82+9FLKq6yUzWvXahdhMC47QbV1+fuPHtWboVlZYwAdOX1anmlslKM+n1q2yI7K+XtXRkZcx+UIUAPHj2sdN+/++01Au2tq5IHKSkJ628ifvT/+GAJ24UKBapRWuuz1Ji+oo2fOaB2Xfd11oeP7+6V3yxbFg4oP/X46tmkTBYeGFLAoTmuNa2Bg+oEKp6RmekeHCaj5m+yg4LDU3+Xm6tYhkhfUlNmztY4b7uxUn+nFxYpfxwDOQKYVFIT+7t9/4zouR4Dq5pBIK5b85ZfQ4DIyRMnrr5szl3mWSjdsIOF2K749zeGVriNM2jg1raiIhtrbLR/X9e23tHDNGgk5hPlVLNuxQ2L2ojYqXC5h8G3Prl1a40rncdlpWvXU0b4+6du3T8V7fsjIzH2QkeXICHQhSpkzRy3dIfb+Vst9IjWVSjduJM+NNwpkZDxLxXiZGv6/p7ZWtvJMlsGgpXNAagGFYHxq3MzbPPvJ7fFQWmEhZZaVUdbll1PWlVdiVgtbQe2rr5fInft++21SmVIsgJ789FPZ8fHHlHvHHeThjArZ1UhPj8qoumtrlWqaf++92sDGOh4ei5K/51x1lZhSUFHZgYw8ePiwfUsmCtD2jz6a4ABBxc88YzuwhiGTK+QbyZ9iUqCi8NC2bRt17dhhLwdZBTRBwOJ8fC4qfPLJ80oz5wQVIt2R55+fkiYHWwBNFLAU0ryQJqcWFIiYQR1sbpZNfDfAYY4GNIHAIhJZ8v77lL5okZgQ1HjJyFMGaIKBXcrONHrGjgEVHHrokUfI39qaXIAmmAqi5e8xGZWXeSJpAYXxBME1cNgnc269VSx++WXVfmmnQf6OFjbNM/oaGmR3TY1jAY0ZnAQAi9g9Uv52hQeiQienAopcveLDD2MvhMQbWD7f8Qj8XEYBA+mmU5d88XPPUdby5aJo7VrHUgHPVLXaTVDRveFUQKEC5Nxyi3ICnLKK/MpKxwLbGZbj3cNdXVK1hDsQUFT2kRpGWtG6deT3eqn/jz8sAYt/ISrAp11RAUqRqJ65fXv3qk0KugaeQ+oGCUQVPbq7qXf3buretYtKXn1VG1Dk2qVvvGGW+swb5XaLsi1bZNMTT9DAwYPawKKLO2/lSlWscefkqLgchaLOr7/WVgbk8LC62aJ140aJ+qVWjLZkiepWTs3PF+PVDVyZmdqAljPx8w07Z36N8h9k6piBjYpjjfFF/0mgo0N1eesqrvOqqsg1qOmgUDMtf+cdE1AM0t/SIvluhciaBwxq6di+3fKSr+C473yAKt6aO1dUcJqImqclL83HYIkagEJExLiDfr+p0uK6+HstXFArcQU0KvOwggceMGXknu+/l//jpfT/Bx9UMjIvATVAfJ9z222x3+VVq6iMZ/54M+gc1CPQfm5Fqs676y6z8NxXVycb7747NG7+7P3ppxCwCxYIUJqOAU/XKDZ+aZjR4QEVQMnGYR4CNx195RU4gpCMHJabJ4pDoUWxExLRHDrhimaOXfTCC2Lx+vUxza7s6683+E8eZc432oeg/LZu2GD2WXk0O1igJLh0vSDIXaVpPN2jZWRIyEaFK3UCGVmkpCgaMcImXUO4Vf7WW2qz2nmLIGElNnDyJI36fNF+wNwxoy1/+/3k0o3bDNAySkpQTBg78Lw8E/RhjgbOS3OjowSH0/PDD5PqxEMnS/Ozz04YyRiydtr8+covjMnZeaYbouDIBOM+l6EVyZWiKSMj/FB31OMRi1580Vx6kJNLXnvNDIX66usn/C0swaMcmLdt3SoN2ojZ94yMyGObN8vw0p143HV1RgwtEPIZcjVCwzCFhOTv8PVZXsGMpzj46KNy4O+/tbz/JZ99ZjorcFHgxAl1pzHgMA3IA0z4UFmteH/Ep7E4K+ZBpU7EnAiEZ9Kyb74xnRW8P5wLe33VZ6Co4cQJCeelE6/OufpqHntZmdYdAR9h2WLXsxFCYROYAShCFAC+cPVqaytgzx6C6gDAzks/HKciAbACKOLUQj4GgBoOCb0FGLcJKOJUvi7dBADyt+jauVMtHSdmVIhXx5uxANxSRjVOAduOjApWtnkziQDPNMSWZJNuPtncH3FrZJgFDm2qrrY8Q+OhCOB6L/vuO3JhiYIHbCkzci7c8tJLKC3K+Q89JC567DHLVHA8qs6LHN6JgKrYFk0fTC0uI5OxrX47SWDR32+EWwibutjJOBFQGDpZzHoqWlsyNB1WPID1Mv/1798v2zhJcCqg8AG84hVNmWoqqtbwunbapDgWSUqsoCSgcwU7tY2WIFdEfCXQDGanTWrGOhVQLHuOfiJ7rGZ0/0naeLr/+B0qa9YkT8tPAgGNqUPFsJleqtgAjbmXKnLGznT9nXvJW+76i+TYmf7UseebVH9qpKkYkcGd6aSegk7qs9LGmZ7/2I6b0t0pDDRUAPWQQ2z3SabdKXxeFJjjvjvFqjVVV0vVrGG1nJiVRcuYx43HyvHNGncfVePKlWfpY7HY3JtvptJNm2x7nJK9u6g1HzuHOqcBKCgH8jEUBOymNp6BghmUc/vtWr9v5+PwbAd1RFP+Bo+p6MPvl9CujFZ5qLQt69ermqpRatMx3adaOAJU3V3Uqfn5oRnl9Z4FAJSFQFgRNeTmeI3LEaDq7lY2ZqYS46Lkb/AtJHADYK2L1mzpSWpQDVkbvFnMWZ0BLJRQJYcbfKv5JKGUWbNsBdXeXdQcnqATxKqh2p+/apVSY9F5kr1ihQQVZCxeDGncVD0tqQARhs3ISTtT0b2i60iOcLaEvgF15z0eMXvZMmECevKkbObv0WITz3E5YqYigO7UfILawKFDqhuvoKpKTuVzqYxx2VrLsDP4R+aDGNOOlFZ7aTI/X1ZTE3O7puOWP1LJOZpP5LHLPDfdZCugtoMKmxeWbZ1ius28jgIVTbbYG+AEy1q+PC7vALD/obRCiEKbpe8Yx0EXPf54fHg7HidBLTL3zjsTiim6cGIpMDve+0fadHp6+sxz/pMdVNjMGynsmrHxeHdKWZmSkafFu1NMjp15y499NuXvo2IwObefnu+jGjttgxIPcsDj632//6715jSETGo338yb08429fyB+vqkfsfffwIMADNY4J+YCzF0AAAAAElFTkSuQmCC"
+          rel="icon" type="image/x-icon"/>
+    <link rel="stylesheet" href="https://unpkg.com/file-icon-vectors@1.0.0/dist/file-icon-vivid.min.css"/>
+    <style type="text/css">body, html {
+            background: #fff;
+            font-family: "Bitstream Vera Sans", "Lucida Grande", "Lucida Sans Unicode", Lucidux, Verdana, Lucida, sans-serif;
+        }
+
+        tr:nth-child(even) {
+            background: #f4f4f4;
+        }
+
+        th, td {
+            padding: 0.1em 0.5em;
+        }
+
+        .sort {
+            cursor: pointer;
+        }
+
+        .meta {
+            margin-bottom: 10px;
+        }
+
+        th {
+            text-align: left;
+            font-weight: bold;
+            background: #eee;
+            border-bottom: 1px solid #aaa;
+        }
+
+        .fiv-viv {
+            margin-right: 8px;
+            font-size: xx-large;
+            filter: grayscale(100%);
+        }
+
+        #list {
+            border: 1px solid #aaa;
+            width: 100%;
+        }
+
+        a {
+            color: #a33;
+        }
+
+        a:hover {
+            color: #e33;
+        }</style>
+    <script>
+        function sortTable(e) {
+            var r, n, t, a, o, s, i, T, f = 0;
+            for (r = document.getElementById("list"), t = !0, T = "asc"; t;) {
+                for (t = !1, n = r.rows, a = 1; a < n.length - 1; a++) if ("parent_dir" !== n[a].id) if (i = !1, o = n[a].getElementsByTagName("TD")[e], s = n[a + 1].getElementsByTagName("TD")[e], "asc" == T) {
+                    if (o.innerHTML.toLowerCase() > s.innerHTML.toLowerCase()) {
+                        i = !0;
+                        break
+                    }
+                } else if ("desc" == T && o.innerHTML.toLowerCase() < s.innerHTML.toLowerCase()) {
+                    i = !0;
+                    break
+                }
+                i ? (n[a].parentNode.insertBefore(n[a + 1], n[a]), t = !0, f++) : 0 == f && "asc" == T && (T = "desc", t = !0)
+            }
+        }
+    </script>
+    <title>Index of {{.Path}}</title>
+</head>
+<body>
+<h1>Index of {{.Path}}</h1>
+<div class="meta">
+    {{.Meta}}
+</div>
+{{.Path}}
+<table id="list">
+    <thead>
+    <tr>
+        <th style="width:55%"><a class="sort" onclick="sortTable(0)">File Name</a></th>
+        <th style="width:20%"><a class="sort" onclick="sortTable(1)">File Size</a></th>
+        <th style="width:25%"><a class="sort" onclick="sortTable(2)">Date</a></th>
+    </tr>
+    </thead>
+    <tbody>
+    {{if .ParentPath}}
+        <tr id="parent_dir">
+            <td class="link"><a href="../">Parent directory/</a></td>
+            <td class="size">-</td>
+            <td class="date">-</td>
+        </tr>
+    {{end}}
+    {{range  $folder := $Folders}}
+        <tr>
+            <td class="link"><span class="fiv-viv fiv-icon-folder"></span><a href="{{$folder.Name}}/"
+                                                                             title="{{$folder.Name}}">{{$folder.Name}}
+                    /</a></td>
+            <td class="size">-</td>
+            <td class="date">{{$folder.LastModified.Format "2006-01-02 15:04:05"}}</td>
+        </tr>
+    {{end}}
+    {{range  $file := $Files}}
+        <tr>
+            <td class="link"><span class="fiv-viv fiv-icon-{{$file.FileType}}"></span><a href="{{$file.Name}}"
+                                                                                         title="{{$file.Name}}">{{$file.Name}}</a>
+            </td>
+            <td class="size">{{byteToMB $file.Size}}</td>
+            <td class="date">{{$file.LastModified.Format "2006-01-02 15:04:05"}}</td>
+        </tr>
+    {{end}}
+
+    </tbody>
+</table>
+</body>
+</html>
