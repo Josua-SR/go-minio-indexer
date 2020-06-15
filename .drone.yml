@@ -1,0 +1,130 @@
+---
+kind: pipeline
+name: announce-begin
+
+clone:
+  disable: true
+
+platform:
+  os: linux
+
+steps:
+  - name: announce
+    image: container.solid-build.xyz/drone/plugins/slack:latest
+    settings:
+      webhook:
+        from_secret: ryver_webhook
+      channel: drone
+      icon_url: https://img.icons8.com/office/80/000000/test-partial-passed.png
+      template: >
+        Building {{repo.name}}/{{build.branch}} (#{{build.number}}) ...
+
+---
+kind: pipeline
+name: linux-amd64
+
+clone:
+  depth: 1
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: plugins/docker
+  environment:
+    ARCH: amd64
+  settings:
+    registry: container.solid-build.xyz
+    repo: container.solid-build.xyz/kube/mioxx
+    tags:
+    - "${DRONE_TAG:-ci}-amd64"
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+
+---
+kind: pipeline
+name: linux-arm64
+
+clone:
+  depth: 1
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+- name: build
+  image: plugins/docker
+  environment:
+    ARCH: arm64
+  settings:
+    registry: container.solid-build.xyz
+    repo: container.solid-build.xyz/kube/mioxx
+    tags:
+    - "${DRONE_TAG:-ci}-arm64"
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+
+---
+kind: pipeline
+name: manifest
+
+clone:
+  disable: true
+
+platform:
+  os: linux
+
+steps:
+- name: manifest
+  image: container.solid-build.xyz/kube/drone-docker-manifest:v0.1
+  settings:
+    target: container.solid-build.xyz/kube/mioxx
+    template: container.solid-build.xyz/kube/mioxx:TAG-ARCH
+    tags:
+    - "${DRONE_TAG:-ci}"
+    platforms:
+    - linux/amd64
+    - linux/arm64
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+
+depends_on:
+- linux-amd64
+- linux-arm64
+
+---
+kind: pipeline
+name: announce-end
+
+clone:
+  disable: true
+
+platform:
+  os: linux
+
+steps:
+  - name: announce
+    image: container.solid-build.xyz/drone/plugins/slack:latest
+    settings:
+      webhook:
+        from_secret: ryver_webhook
+      channel: drone
+      icon_url: https://img.icons8.com/office/80/000000/test-passed.png
+      template: >
+        {{#success build.status}}
+          {{repo.name}}/{{build.branch}} (#{{build.number}}) succeeded.
+        {{else}}
+          {{repo.name}}/{{build.branch}} (#{{build.number}}) succeeded!
+        {{/success}}
+
+depends_on:
+- manifest
