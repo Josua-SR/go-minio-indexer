@@ -7,6 +7,7 @@ import (
 	"github.com/minio/minio-go/v6"
 	"html/template"
 	"io"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -87,7 +88,7 @@ func (dl *DirList) scan(path string) error {
 	}
 	doneCh := make(chan struct{})
 	defer close(doneCh)
-	objectCh := client.ListObjects(BucketName, path, true, doneCh)
+	objectCh := client.ListObjectsV2WithMetadata(BucketName, path, true, doneCh)
 	for object := range objectCh {
 		if object.Err != nil {
 			Log.Error(object.Err.Error())
@@ -128,6 +129,21 @@ func (dl *DirList) scan(path string) error {
 					file.Name = cutFileNameSlice[0]
 					file.Size = object.Size
 					file.LastModified = object.LastModified
+					for metadata_key, metadata_value := range object.UserMetadata {
+						if(metadata_key == "X-Amz-Meta-Mc-Attrs") {
+							for _, attribute := range strings.Split(metadata_value, "/") {
+								var kv = strings.Split(attribute, ":")
+								if(len(kv) == 2) {
+									if(kv[0] == "mtime") {
+										v, err := strconv.ParseInt(kv[1], 10, 64)
+										if(err == nil) {
+											file.LastModified = time.Unix(v, 0)
+										}
+									}
+								}
+							}
+						}
+					}
 					tmpFileTypes := strings.Split(file.Name, ".")
 					file.FileType = tmpFileTypes[len(tmpFileTypes)-1]
 					file.Path = path + file.Name
