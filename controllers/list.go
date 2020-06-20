@@ -1,30 +1,67 @@
 package controllers
 
 import (
-	"github.com/maltegrosse/go-minio-list/models"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"strings"
+
+	. "github.com/maltegrosse/go-minio-list/log"
+	"github.com/maltegrosse/go-minio-list/models"
 )
 
 // List returns either a rendered index file or forwards the target download file
 func List(w http.ResponseWriter, r *http.Request) {
-	var dl models.DirList
-	dl.Path = r.URL.Path
-	// scan the current path
-	err := dl.ScanPath(r.URL.Path)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
-		return
+	var root *models.DirectoryEntry
+	var leaf *models.DirectoryEntry
+	var requestpath []string
+
+	// create directory index of bucket
+	root = models.IndexBucket()
+	// TODO: cache result
+
+	// look up request path in directory tree
+	requestpath = make([]string, 0, strings.Count(r.URL.Path, "/"))
+	for _, v := range strings.Split(r.URL.Path, "/") {
+		if len(v) > 1 {
+			requestpath = append(requestpath, v)
+		}
+	}
+	Log.Info("Serving path " + strings.Join(requestpath, "/"))
+	leaf = root
+	for level := 0; level < len(requestpath); level++ {
+		var matched bool = false
+		// match this path level
+		for _, f := range leaf.Files {
+			Log.Info("Have entry " + leaf.Name + " at " + strings.Join(leaf.Path, "/"))
+			if f.Name == requestpath[level] {
+				// have a match
+				leaf = f
+				matched = true
+
+				// continue on next level, if any
+				break
+			}
+
+			// try next entry
+			continue
+		}
+
+		if !matched {
+			// no match :(
+			http.Error(w, "file/folder not found", http.StatusNotFound)
+			return
+		}
 	}
 
-	// repair url if someone misses a /
-	if dl.Redirect {
-		http.Redirect(w, r, r.URL.Path+"/", http.StatusMovedPermanently)
-	}
-	// if the path ends in a file
-	if dl.IsFile {
-		// either use reverse proxy
+	// getting here means the path was matched!
+	// TODO: is trailing / a problem?
+
+	// special handling for files
+	if leaf.Type == models.DEFile {
+		Log.Debug("Serving file " + leaf.Name + " at " + strings.Join(leaf.Path, "/"))
+
+		// either proxy the download
 		if models.ReverseProxy {
 			uri, _ := url.Parse(models.DirectUrl + r.URL.Path)
 			proxy := httputil.ReverseProxy{Director: func(r *http.Request) {
@@ -35,18 +72,20 @@ func List(w http.ResponseWriter, r *http.Request) {
 			}}
 			proxy.ServeHTTP(w, r)
 		} else {
-			// or just redirect
+			// or redirect to S3
 			http.Redirect(w, r, models.PublicUrl+r.URL.Path, http.StatusTemporaryRedirect)
 		}
 
-	} else {
-		// if no files/folders scanned and not in root path in an empty bucket
-		if len(dl.Folders) < 1 && len(dl.Files) < 1 && r.URL.Path != "/" {
-			http.Error(w, "file/folder not found", http.StatusNotFound)
-			return
-		}
-		// if all fine, render the html template
-		res, err := dl.RenderHtml()
+		// done
+		return
+	}
+
+	// special handling for folders
+	if leaf.Type == models.DEFolder {
+		Log.Info("Serving folder " + leaf.Name + " at " + strings.Join(leaf.Path, "/"))
+
+		// render the html template
+		res, err := leaf.RenderHTML()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -57,6 +96,13 @@ func List(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
+		// all good
+		return
 	}
 
+	// getting here means that a new DirectoryEntry type has been used
+	Log.Error("internal error handling http request: invalid directory entry")
+	http.Error(w, "internal error", http.StatusInternalServerError)
+	return
 }

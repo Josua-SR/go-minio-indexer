@@ -1,5 +1,5 @@
-{{$Folders := .Folders}}
 {{$Files := .Files}}
+{{$path := fullPath .}}
 <!DOCTYPE html>
 <html>
 <head>
@@ -72,13 +72,13 @@
             }
         }
     </script>
-    <title>Index of {{.Path}}</title>
+    <title>Index of {{$path}}</title>
 </head>
 <body>
 <div class="meta">
     {{.Meta}}
 </div>
-<h1>Index of {{.Path}}</h1>
+<h1>Index of {{$path}}</h1>
 <table id="list">
     <thead>
     <tr>
@@ -88,32 +88,24 @@
     </tr>
     </thead>
     <tbody>
-    {{if .ParentPath}}
+    {{if ne $path "/"}}
         <tr id="parent_dir">
             <td class="link"><a href="../">Parent directory/</a></td>
             <td class="size">-</td>
             <td class="date">-</td>
         </tr>
     {{end}}
-    {{range  $folder := $Folders}}
-        <tr>
-            <td class="link"><span class="fiv-viv fiv-icon-folder"></span><a href="{{$folder.Name}}/"
-                                                                             title="{{$folder.Name}}">{{$folder.Name}}
-                    /</a></td>
-            <td class="size">-</td>
-            <td class="date">{{$folder.LastModified.Format "2006-01-02 15:04:05"}}</td>
-        </tr>
-    {{end}}
     {{range  $file := $Files}}
+    {{if not $file.IsMeta}}
         <tr>
-            <td class="link"><span class="fiv-viv fiv-icon-{{$file.FileType}}"></span><a href="{{$file.Name}}"
+            <td class="link"><span class="fiv-viv fiv-icon-{{fileType $file}}"></span><a href="/{{fullPath $file}}"
                                                                                          title="{{$file.Name}}">{{$file.Name}}</a>
             </td>
-            <td class="size">{{byteToMB $file.Size}}</td>
-            <td class="date">{{$file.LastModified.Format "2006-01-02 15:04:05"}}</td>
+            <td class="size">{{fileSize $file}}</td>
+            <td class="date">{{$file.MTime.Format "2006-01-02 15:04:05"}}</td>
         </tr>
     {{end}}
-
+    {{end}}
     </tbody>
 </table>
 </body>

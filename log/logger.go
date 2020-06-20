@@ -1,9 +1,10 @@
 package log
 
 import (
+	"os"
+
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"os"
 )
 
 var Log *zap.Logger = createLogger()
@@ -28,7 +29,8 @@ func createLogger() *zap.Logger {
 
 	defer logger.Sync()
 
-	atom.SetLevel(zap.DebugLevel)
+	//atom.SetLevel(zap.DebugLevel)
+	atom.SetLevel(zap.InfoLevel)
 
 	return logger
 }
