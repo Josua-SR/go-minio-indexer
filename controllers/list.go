@@ -67,6 +67,9 @@ func List(w http.ResponseWriter, r *http.Request) {
 	if leaf.Type == models.DEFile {
 		Log.Debug("Serving file " + leaf.Name + " at " + strings.Join(leaf.Path, "/"))
 
+		// allow some caching as files are rather static
+		w.Header().Set("Cache-Control", "max-age:600, public")
+
 		// either proxy the download
 		if models.ReverseProxy {
 			uri, _ := url.Parse(models.DirectUrl + r.URL.Path)
@@ -89,6 +92,9 @@ func List(w http.ResponseWriter, r *http.Request) {
 	// special handling for folders
 	if leaf.Type == models.DEFolder {
 		Log.Info("Serving folder " + leaf.Name + " at " + strings.Join(leaf.Path, "/"))
+
+		// allow very cautious caching
+		w.Header().Set("Cache-Control", "max-age:60, public")
 
 		// render the html template
 		res, err := leaf.RenderHTML()
