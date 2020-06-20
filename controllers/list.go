@@ -10,15 +10,21 @@ import (
 	"github.com/maltegrosse/go-minio-list/models"
 )
 
+// Index is the persistent directory index used by the list controller
+var Index *models.DirectoryEntry = nil
+
 // List returns either a rendered index file or forwards the target download file
 func List(w http.ResponseWriter, r *http.Request) {
 	var root *models.DirectoryEntry
 	var leaf *models.DirectoryEntry
 	var requestpath []string
 
-	// create directory index of bucket
-	root = models.IndexBucket()
-	// TODO: cache result
+	// reuse existing index, if any
+	root = Index
+	if Index == nil {
+		Log.Info("directory index not (yet) ready")
+		http.Error(w, "index not ready", http.StatusServiceUnavailable)
+	}
 
 	// look up request path in directory tree
 	requestpath = make([]string, 0, strings.Count(r.URL.Path, "/"))

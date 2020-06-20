@@ -2,13 +2,16 @@ package main
 
 import (
 	"fmt"
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/jessevdk/go-flags"
+	"github.com/maltegrosse/go-minio-list/controllers"
 	. "github.com/maltegrosse/go-minio-list/log"
 	"github.com/maltegrosse/go-minio-list/models"
 	"github.com/maltegrosse/go-minio-list/routers"
 	"github.com/spf13/viper"
-	"net/http"
-	"os"
 )
 
 type Options struct {
@@ -56,12 +59,36 @@ func main() {
 	}
 	apiConnection := viper.GetString("service_host") + ":" + viper.GetString("service_port")
 
+	// start directory indexing in background
+	Log.Info("Starting index updater")
+	go updateIndex()
+
 	Log.Info("Starting service on: " + apiConnection)
 	err = http.ListenAndServe(apiConnection, routers.Routes())
 	if err != nil {
 		panic(err)
 	}
 
+}
+
+func updateIndex() {
+	var tick <-chan time.Time
+
+	// get index once
+	Log.Info("Building initial Index")
+	controllers.Index = models.IndexBucket()
+
+	// then once per minute
+	tick = time.Tick(time.Minute)
+	for {
+		select {
+		case <-tick:
+			// update index
+			// TODO: only if changed
+			Log.Info("Rebuilding Index")
+			controllers.Index = models.IndexBucket()
+		}
+	}
 }
 
 func checkStorage() error {
