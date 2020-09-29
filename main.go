@@ -99,8 +99,8 @@ func checkStorage() error {
 	}
 	_, err = minioClient.GetBucketPolicy(models.BucketName)
 	if err != nil {
-		Log.Error(err.Error())
-		return err
+		Log.Warn("Failed to retrieve bucket policy: " + err.Error())
+		return nil
 	}
 	return nil
 }
