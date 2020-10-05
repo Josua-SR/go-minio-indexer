@@ -304,6 +304,7 @@ func fixTreeWithMetafile(root *DirectoryEntry, client *minio.Client) {
 				Log.Error("failed to copy meta file to buffer: " + err.Error())
 				continue
 			}
+			object.Close()
 
 			// add to directory entry
 			root.Meta = template.HTML(buffer.Bytes())
